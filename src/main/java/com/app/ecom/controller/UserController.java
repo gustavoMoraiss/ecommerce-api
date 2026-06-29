@@ -2,7 +2,6 @@ package com.app.ecom.controller;
 
 import com.app.ecom.dto.UserRequest;
 import com.app.ecom.dto.UserResponse;
-import com.app.ecom.model.User;
 import com.app.ecom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +39,8 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody UserRequest updatedUserRequest
     ) {
-        if (userService.canUpdateUser(id, updatedUserRequest)) {
+        boolean updated = userService.updateUser(id, updatedUserRequest);
+        if (updated) {
             return ResponseEntity.ok("User updated successfully!");
         }
         return ResponseEntity.notFound().build();

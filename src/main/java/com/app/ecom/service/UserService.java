@@ -30,13 +30,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-
     public Optional<UserResponse> fetchUser(Long id) {
         return userRepository.findById(id)
                 .map(this::mapToUserResponse);
     }
 
-    public boolean canUpdateUser(Long id, UserRequest updateUser) {
+    public boolean updateUser(Long id, UserRequest updateUser) {
         return userRepository.findById(id).map(existingUser -> {
             updateUserFromRequest(existingUser, updateUser);
             userRepository.save(existingUser);
@@ -65,20 +64,19 @@ public class UserService {
         return userResponse;
     }
 
-
     private void updateUserFromRequest(User user, UserRequest userRequest) {
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());
         user.setEmail(userRequest.getEmail());
         user.setPhone(userRequest.getPhone());
         if (userRequest.getAddress() != null) {
-            Address addressDTO = new Address();
-            addressDTO.setStreet(userRequest.getAddress().getStreet());
-            addressDTO.setCity(userRequest.getAddress().getCity());
-            addressDTO.setState(userRequest.getAddress().getState());
-            addressDTO.setCountry(userRequest.getAddress().getCountry());
-            addressDTO.setZipcode(userRequest.getAddress().getZipcode());
-            user.setAddress(addressDTO);
+            Address address = new Address();
+            address.setStreet(userRequest.getAddress().getStreet());
+            address.setCity(userRequest.getAddress().getCity());
+            address.setState(userRequest.getAddress().getState());
+            address.setCountry(userRequest.getAddress().getCountry());
+            address.setZipcode(userRequest.getAddress().getZipcode());
+            user.setAddress(address);
         }
     }
 }
