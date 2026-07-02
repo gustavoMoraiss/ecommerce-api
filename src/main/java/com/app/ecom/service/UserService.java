@@ -79,4 +79,11 @@ public class UserService {
             user.setAddress(address);
         }
     }
+
+    public boolean deleteUser(Long id) {
+        return userRepository.findById(id).map(user -> {
+            userRepository.delete(user);
+            return true;
+        }).orElse(false);
+    }
 }

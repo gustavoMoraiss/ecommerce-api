@@ -3,18 +3,18 @@ package com.app.ecom.controller;
 import com.app.ecom.dto.UserRequest;
 import com.app.ecom.dto.UserResponse;
 import com.app.ecom.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUser() {
@@ -32,6 +32,15 @@ public class UserController {
     public ResponseEntity<String> createUser(@RequestBody UserRequest userRequest) {
         userService.addUser(userRequest);
         return ResponseEntity.ok("User added successfully!");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        boolean deleted = userService.deleteUser(id);
+        if (deleted) {
+            return ResponseEntity.ok("User deleted successfully!");
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
