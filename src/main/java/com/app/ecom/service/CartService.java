@@ -2,6 +2,7 @@ package com.app.ecom.service;
 
 
 import com.app.ecom.dto.CartItemRequest;
+import com.app.ecom.dto.CartItemResponse;
 import com.app.ecom.model.CartItem;
 import com.app.ecom.model.Product;
 import com.app.ecom.model.User;
@@ -9,10 +10,13 @@ import com.app.ecom.repository.CartItemRepository;
 import com.app.ecom.repository.ProductRepository;
 import com.app.ecom.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,5 +66,24 @@ public class CartService {
         cartItemRepository.delete(carItemOpt.get());
 
         return true;
+    }
+
+    public @Nullable List<CartItemResponse> fetchAllCartItem(String userId) {
+        Optional<List<CartItem>> cartItems = userRepository.findById(Long.valueOf(userId))
+                .map(cartItemRepository::findByUser);
+
+        return cartItems.map(items -> items.stream()
+                .map(this::mapToCartItemResponse).collect(Collectors.toList())).orElse(List.of());
+
+    }
+
+    private CartItemResponse mapToCartItemResponse(CartItem cartItem) {
+        CartItemResponse cartItemResponse = new CartItemResponse();
+        cartItemResponse.setId(cartItem.getId());
+        cartItemResponse.setProduct(cartItem.getProduct());
+        cartItemResponse.setUser(cartItem.getUser());
+        cartItemResponse.setPrice(cartItem.getPrice());
+        cartItemResponse.setQuantity(cartItem.getQuantity());
+        return cartItemResponse;
     }
 }
