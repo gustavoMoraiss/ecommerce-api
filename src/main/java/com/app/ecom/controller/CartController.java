@@ -20,8 +20,20 @@ public class CartController {
             @RequestBody CartItemRequest cartItemRequest
     ) {
         boolean successResult = cartService.addToCart(userId, cartItemRequest);
-        if (successResult) return ResponseEntity.status(HttpStatus.CREATED).body("Item added to cart");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to add item to cart");
+        return successResult
+                ? ResponseEntity.status(HttpStatus.CREATED).body("Item added to cart")
+                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to add item to cart");
+    }
+
+    @DeleteMapping("/items/{productId}")
+    public ResponseEntity<Void> removeFromCart(
+            @RequestHeader("X-User-ID") String userId,
+            @PathVariable Long productId
+    ) {
+        boolean successResult = cartService.deleteItemFromCart(userId, productId);
+        return successResult
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 
 }

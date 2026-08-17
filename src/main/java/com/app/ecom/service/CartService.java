@@ -48,4 +48,19 @@ public class CartService {
         cartItemRepository.save(cartItem);
         return true;
     }
+
+    public boolean deleteItemFromCart(String userId, Long productId) {
+        Optional<Product> productOpt = productRepository.findById(productId);
+        if (productOpt.isEmpty()) return false;
+
+        Optional<User> userOpt = userRepository.findById(Long.valueOf(userId));
+        if (userOpt.isEmpty()) return false;
+
+        Optional<CartItem> carItemOpt = cartItemRepository.findByUserAndProduct(userOpt.get(), productOpt.get());
+        if (carItemOpt.isEmpty()) return false;
+
+        cartItemRepository.delete(carItemOpt.get());
+
+        return true;
+    }
 }
