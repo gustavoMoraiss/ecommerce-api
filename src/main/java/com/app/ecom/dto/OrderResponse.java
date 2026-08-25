@@ -14,5 +14,4 @@ public class OrderResponse {
     private OrderStatus status;
     private List<OrderItemDTO> items;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

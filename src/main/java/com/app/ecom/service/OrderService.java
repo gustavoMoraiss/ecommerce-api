@@ -70,6 +70,7 @@ public class OrderService {
         orderResponse.setStatus(savedOrder.getStatus());
         orderResponse.setTotalAmount(savedOrder.getTotalAmount());
         orderResponse.setItems(savedOrder.getItems().stream().map(this::mapToOrderItemResponse).collect(Collectors.toList()));
+        orderResponse.setCreatedAt(savedOrder.getCreatedAt());
         return orderResponse;
     }
 

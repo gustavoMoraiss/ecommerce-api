@@ -9,6 +9,7 @@ import com.app.ecom.model.User;
 import com.app.ecom.repository.CartItemRepository;
 import com.app.ecom.repository.ProductRepository;
 import com.app.ecom.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
@@ -87,6 +88,7 @@ public class CartService {
         return cartItemResponse;
     }
 
+    @Transactional
     public void clearCart(String userId) {
         Optional<User> userOpt = userRepository.findById(Long.valueOf(userId));
         userOpt.ifPresent(cartItemRepository::deleteByUser);
