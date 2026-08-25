@@ -86,4 +86,9 @@ public class CartService {
         cartItemResponse.setQuantity(cartItem.getQuantity());
         return cartItemResponse;
     }
+
+    public void clearCart(String userId) {
+        Optional<User> userOpt = userRepository.findById(Long.valueOf(userId));
+        userOpt.ifPresent(cartItemRepository::deleteByUser);
+    }
 }
